@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myobjectserver.mapper.UsersRouterMapper">
+
+    <select id="getRouterChildren" resultType="com.example.myobjectserver.pojo.UsersRouter">
+        select r.* from users_router r
+        inner join users_router s on r.parent_id = s.id
+        where r.parent_id = #{parentId}
+        order by s.id
+    </select>
+   
+
+</mapper>
+

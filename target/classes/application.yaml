@@ -1,0 +1,40 @@
+server:
+  port: 8080
+  address: 192.168.1.220
+spring:
+  application:
+    name: my-object-server
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/myObjServer?useUnicode=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#management:
+#  endpoint:
+#    health:
+#      show-details: always
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+
+my:
+  upload:
+    file-upload-path: /images/
+  jwt:
+    key: HengGuang666-YaoKaiXingYaoKuaiLe
+    #1=1s 60 * 60 * 24 = 86400 = 1DAY
+    time: 86400
+    iss: Xu
+
+
+
