@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myobjectserver.mapper.UsersMapper">
+
+
+    <select id="getUserRoutersById" resultType="com.example.myobjectserver.pojo.UsersRouter">
+            <if test="userType == 1">
+                select id,path,icon_path,text,parent_id
+                from users_router
+                where is_hidden = 0
+                order by sort_order asc;
+            </if>
+            <if test="userType == 2">
+                select distinct r.id,r.path,r.icon_path,r.text,r.parent_id,r.sort_order
+                from users_router r
+                inner join users u
+                on r.permission_id = u.user_type
+                WHERE u.user_type = 2 and r.is_hidden = 0
+                order by r.sort_order asc;
+            </if>
+    </select>
+
+   
+
+</mapper>
+
