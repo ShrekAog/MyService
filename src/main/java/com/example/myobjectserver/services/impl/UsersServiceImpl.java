@@ -10,8 +10,7 @@ import com.example.myobjectserver.services.UsersService;
 import com.example.myobjectserver.utils.JwtUtil;
 import com.example.myobjectserver.vo.UserVo;
 import com.example.myobjectserver.vo.UsersRoutersVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +34,7 @@ import java.util.List;
  * version:1.0
  */
 @Service
+@Slf4j
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements UsersService, UserDetailsService {
 
 
@@ -42,8 +42,6 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     private final UsersRouterMapper routerMapper;
     private AuthenticationManager manager;
     private final PasswordEncoder passwordEncoder;
-    //日志打印
-    private static  final Logger logger = LoggerFactory.getLogger(UsersServiceImpl.class);
 
     /**
      * 依赖构造注入
@@ -121,8 +119,8 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
         String token1 = JwtUtil.createToken(username, String.valueOf(userDetails.getUserType()));
         userDetails.setToken(token1);
-        logger.info("用户 {} 登录成功",username);
-        logger.info("用户权限 {} ",userDetails.getAuthorities().toString());
+        log.info("用户 {} 登录成功",username);
+        log.info("用户权限 {} ",userDetails.getAuthorities().toString());
 
         return userDetails;
     }

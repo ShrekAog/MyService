@@ -90,6 +90,10 @@ public class UserController {
         String subject = claims.getSubject();
         return R.ok(usersService.getUserInfoByUsername(subject));
     }
+    @PutMapping("/update")
+    public R<Boolean> update(@RequestBody Users users){
+        return R.ok(usersService.updateById(users));
+    }
 
 
 

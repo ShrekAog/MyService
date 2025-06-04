@@ -53,7 +53,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorization -> authorization
                 .requestMatchers("/api/users/login").permitAll()
                 .requestMatchers("/api/users/register").permitAll()
-                .requestMatchers("/api/users/checkUsername/**").permitAll()
+                .requestMatchers("/api/users/checkUsername").permitAll()
                 .requestMatchers("/api/config/wallpaperList").permitAll()
                 .requestMatchers("/api/engine/list").permitAll()
                 .requestMatchers("/api/classify/getClassifyListById/**").permitAll()
@@ -61,6 +61,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/config/getRegisterWallpaperConfig").permitAll()
                 .requestMatchers("/api/resource/getOne/**").permitAll()
                 .requestMatchers("/api/users/parseUserToken").permitAll()
+                .requestMatchers("/api/resource/byList").permitAll()
                 .requestMatchers("/images/**").permitAll()
                 .anyRequest().authenticated());
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));

@@ -10,6 +10,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -23,6 +24,7 @@ import java.util.List;
  * createTime:2025-04-01
  * version:1.0
  */
+@Slf4j
 public class UserFilter extends OncePerRequestFilter {
     //精准匹配接口
     List<String> bypassPaths = List.of(
@@ -31,6 +33,8 @@ public class UserFilter extends OncePerRequestFilter {
             "/api/users/login", //登录
             "/api/users/register",
             "/api/resource/getOne", // 获取单个资源
+            "/api/resource/byList",
+            "/api/users/checkUsername",
             "/api/config/getLoginWallpaperConfig", // 获取登录壁纸config配置
             "/api/config/getRegisterWallpaperConfig",//获取注册页面配置
             "/api/users/parseUserToken" //解析token返回type"
@@ -39,7 +43,6 @@ public class UserFilter extends OncePerRequestFilter {
     List<String> bypassPathsTwo = List.of(
             "/api/classify/getClassifyListById/", // 根据目录id获取所有资源
             "/api/resource/getOne/", //根据资源id获取资源
-            "/api/users/checkUsername/",
             "/images/" //静态图片
     );
 
@@ -61,6 +64,7 @@ public class UserFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
+        log.info("path: {}", path);
         if(bypassPaths.contains(path) || bypassPathsTwo.stream().anyMatch(path::startsWith)){
             filterChain.doFilter(request,response);
             return;
