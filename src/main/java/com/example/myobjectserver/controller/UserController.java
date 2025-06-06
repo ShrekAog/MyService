@@ -69,27 +69,23 @@ public class UserController {
         return R.ok(usersService.checkUsernameExist(username));
     }
 
-    /**
-     * 根据token解析获取类型
-     * @param token token
-     * @return 用户类型 1admin 2user
-     */
     @GetMapping("/parseUserToken")
     public R<String> parseUserToken(String token){
         Claims claims = JwtUtil.parsePayload(token);
         return R.ok((String) claims.get("type"));
     }
-    /**
-     * 根据token解析获取用户名
-     * @param token token
-     * @return 用户名 username
-     */
+
     @GetMapping("/getUserInfo")
     public R<UserVo> getUserInfo(String token){
         Claims claims = JwtUtil.parsePayload(token);
         String subject = claims.getSubject();
         return R.ok(usersService.getUserInfoByUsername(subject));
     }
+    @GetMapping("/getUserInfo/{userId}")
+    public R<UserVo> getUserInfoById(@PathVariable("userId") Integer userId){
+        return R.ok(usersService.getUserInfoById(userId));
+    }
+
     @PutMapping("/update")
     public R<Boolean> update(@RequestBody Users users){
         return R.ok(usersService.updateById(users));

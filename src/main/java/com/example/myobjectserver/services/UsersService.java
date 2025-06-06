@@ -57,6 +57,13 @@ public interface UsersService extends IService<Users> {
      * @return UserVo
      */
     UserVo getUserInfoByUsername(String username);
+
+    /**
+     * 根据ID获取用户信息
+     * @param id
+     * @return
+     */
+    UserVo getUserInfoById(Integer id);
     /**
      * 判断用户名是否存在
      * @param username 用户名

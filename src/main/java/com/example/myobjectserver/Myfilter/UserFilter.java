@@ -43,6 +43,7 @@ public class UserFilter extends OncePerRequestFilter {
     List<String> bypassPathsTwo = List.of(
             "/api/classify/getClassifyListById/", // 根据目录id获取所有资源
             "/api/resource/getOne/", //根据资源id获取资源
+            "/api/users/getUserInfo/**",//根据id获取用户
             "/images/" //静态图片
     );
 

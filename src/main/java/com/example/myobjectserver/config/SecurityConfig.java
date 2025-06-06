@@ -62,6 +62,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/resource/getOne/**").permitAll()
                 .requestMatchers("/api/users/parseUserToken").permitAll()
                 .requestMatchers("/api/resource/byList").permitAll()
+                .requestMatchers("/api/users/getUserInfo/**").permitAll()
                 .requestMatchers("/images/**").permitAll()
                 .anyRequest().authenticated());
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));

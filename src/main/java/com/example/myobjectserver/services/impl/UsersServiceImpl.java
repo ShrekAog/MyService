@@ -153,6 +153,22 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     }
 
     @Override
+    public UserVo getUserInfoById(Integer id) {
+        Users users = usersMapper.selectById(id);
+        return UserVo.builder()
+                .id(users.getId())
+                .username(users.getUsername())
+                .nickName(users.getNickName())
+                .avatar(users.getAvatar())
+                .email(users.getEmail())
+                .phoneNumber(users.getPhoneNumber())
+                .gender(users.getGender())
+                .introduction(users.getIntroduction())
+                .userType(users.getUserType())
+                .build();
+    }
+
+    @Override
     public Boolean checkUsernameExist(String username) {
         Users users = usersMapper.checkUsernameExist(username);
         return users != null;
