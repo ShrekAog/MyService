@@ -17,7 +17,7 @@ public interface ResourceService extends IService<Resource> {
      * 解析文件并上传到服务器
      * @param file 上传文件
      * @param type 文件类型
-     * @return Integer 1成功 0失败
+     * @return 图片ID
      * @throws IOException IOException
      */
     Integer uploadResource(MultipartFile file,String type,Integer classify) throws IOException;

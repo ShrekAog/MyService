@@ -63,6 +63,11 @@ public class SecurityConfig {
                 .requestMatchers("/api/users/parseUserToken").permitAll()
                 .requestMatchers("/api/resource/byList").permitAll()
                 .requestMatchers("/api/users/getUserInfo/**").permitAll()
+
+                .requestMatchers("api/note/notesImage").permitAll()
+                .requestMatchers("api/note/add").permitAll()
+                .requestMatchers("api/note/list").permitAll()
+
                 .requestMatchers("/images/**").permitAll()
                 .anyRequest().authenticated());
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));

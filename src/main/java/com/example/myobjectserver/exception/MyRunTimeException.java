@@ -22,4 +22,8 @@ public class MyRunTimeException extends RuntimeException{
         this.message = resultCodeEnum.getMessage();
         this.success = resultCodeEnum.getSuccess();
     }
+
+    public MyRunTimeException(Exception e) {
+        super(e);
+    }
 }

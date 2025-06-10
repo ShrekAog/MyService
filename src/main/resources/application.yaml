@@ -30,6 +30,7 @@ spring:
 my:
   upload:
     file-upload-path: /images/
+    notes-upload-path: /notesImages/
   jwt:
     key: HengGuang666-YaoKaiXingYaoKuaiLe
     #1=1s 60 * 60 * 24 = 86400 = 1DAY

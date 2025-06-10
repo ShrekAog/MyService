@@ -66,10 +66,10 @@ public class UserFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
         log.info("path: {}", path);
-        if(bypassPaths.contains(path) || bypassPathsTwo.stream().anyMatch(path::startsWith)){
+        /*if(bypassPaths.contains(path) || bypassPathsTwo.stream().anyMatch(path::startsWith)){
             filterChain.doFilter(request,response);
             return;
-        }
+        }*/
 
        /* TestingAuthenticationToken token = new TestingAuthenticationToken("username", "password", "ROLE_USER");
         SecurityContextHolder.getContext().setAuthentication(token);*/
