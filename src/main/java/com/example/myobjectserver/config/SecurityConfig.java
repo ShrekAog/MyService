@@ -3,6 +3,7 @@ package com.example.myobjectserver.config;
 
 
 import com.example.myobjectserver.Myfilter.UserFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author 恒光
  * createTime:2025-04-01
@@ -27,7 +31,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+    @Value("${my.security.adminPath}")
+    private String adminPath;
+    @Value("${my.security.userPath}")
+    private String userPath;
+    @Value("${my.security.publicPath}")
+    private String publicPath;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
@@ -48,27 +57,46 @@ public class SecurityConfig {
                 .anonymous(AbstractHttpConfigurer::disable);
 
 
-
-
+        String[] adminPaths = Arrays.stream(adminPath.split(",")).map(String::trim).toArray(String[]::new);
+        String[] publicPaths = Arrays.stream(publicPath.split(",")).map(String::trim).toArray(String[]::new);
+        String[] userPaths = Arrays.stream(userPath.split(",")).map(String::trim).toArray(String[]::new);
         http.authorizeHttpRequests(authorization -> authorization
-                .requestMatchers("/api/users/login").permitAll()
-                .requestMatchers("/api/users/register").permitAll()
+                .requestMatchers(publicPaths).permitAll()
+                .requestMatchers(userPaths).hasAnyRole("USER", "ADMIN")
+                .requestMatchers(adminPaths).hasRole("ADMIN")
+
+                //检查用户名是否存在
                 .requestMatchers("/api/users/checkUsername").permitAll()
+                //验证token是否过期
+                .requestMatchers("/api/users/checkToken/**").permitAll()
+                //获取主页壁纸配置文件
                 .requestMatchers("/api/config/wallpaperList").permitAll()
-                .requestMatchers("/api/engine/list").permitAll()
+                //获取引擎列表
+                //.requestMatchers("/api/engine/list").hasRole("ADMIN")
+                //根据目录ID获取资源列表
                 .requestMatchers("/api/classify/getClassifyListById/**").permitAll()
+                //获取登录页壁纸配置文件
                 .requestMatchers("/api/config/getLoginWallpaperConfig").permitAll()
+                //获取注册页壁纸配置文件
                 .requestMatchers("/api/config/getRegisterWallpaperConfig").permitAll()
+                //根据id获取单个资源
                 .requestMatchers("/api/resource/getOne/**").permitAll()
-                .requestMatchers("/api/users/parseUserToken").permitAll()
+                //获取所有资源
                 .requestMatchers("/api/resource/byList").permitAll()
+                //根据用户id获取用户信息
                 .requestMatchers("/api/users/getUserInfo/**").permitAll()
+                //根据用户id获取路由列表
+                .requestMatchers("/api/users/routers/**").permitAll()
 
-                .requestMatchers("api/note/notesImage").permitAll()
-                .requestMatchers("api/note/add").permitAll()
-                .requestMatchers("api/note/list").permitAll()
+                .requestMatchers("/api/note/notesImage").permitAll()
+                .requestMatchers("/api/note/add").permitAll()
+                .requestMatchers("/api/note/list").permitAll()
+                .requestMatchers("/api/note/add").permitAll()
 
+                //放行服务器资源
                 .requestMatchers("/images/**").permitAll()
+                //放行服务器资源
+                .requestMatchers("/notesImages/**").permitAll()
                 .anyRequest().authenticated());
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.addFilterBefore(new UserFilter(), UsernamePasswordAuthenticationFilter.class);

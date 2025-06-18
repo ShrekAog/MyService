@@ -19,12 +19,19 @@ public interface NoteService extends IService<Note> {
      * @param username 用户名
      * @return true || false
      */
-    Boolean notesResource(List<MultipartFile> files, String username) throws IOException;
+    Boolean notesResource(List<MultipartFile> files, String username,Integer userId,Integer noteId) throws IOException;
 
     /**
      * 发布说说
      * @param note 对象
-     * @return true || false
+     * @return 说说主键
      */
-    Boolean publish(Note note);
+    Integer publish(Note note);
+
+    /**
+     * 根据id获取说说
+     * @param userId
+     * @return 说说列表
+     */
+    List<Note> getNoteByUserId(Integer userId);
 }

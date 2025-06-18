@@ -25,6 +25,8 @@ import java.util.Date;
 public class ResourcePath {
     @TableId(type = IdType.AUTO)
     private Integer id;
+    @TableField("user_id")
+    private Integer userId;
     @TableField("title") //标题
     private String title;
     @TableField("classify") //分类

@@ -24,4 +24,5 @@ public class UserVo {
     private Integer gender;
     private Integer userType;
     private String phoneNumber;
+    private String token;
 }

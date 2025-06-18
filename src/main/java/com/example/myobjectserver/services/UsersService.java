@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.myobjectserver.pojo.Users;
 import com.example.myobjectserver.pojo.UsersRouter;
 import com.example.myobjectserver.vo.UserVo;
-import com.example.myobjectserver.vo.UsersRoutersVo;
 
 import java.util.List;
 
@@ -14,26 +13,12 @@ import java.util.List;
  * version:1.0
  */
 public interface UsersService extends IService<Users> {
-    /**
+   /* *//**
      * 根据用户类型返回对应的路由表
      * @param userType 用户类型
      * @return 用户路由列表
-     */
-    List<UsersRouter> getUserRoutersById(Integer userType);
-
-    /**
-     * 根据路由列表进行子菜单处理
-     * @param routers 路由列表
-     * @return 处理好之后的路由表
-     */
-    List<UsersRoutersVo> getUserRoutersVoByList(List<UsersRouter> routers);
-
-    /**
-     *根据路由对象修改数据
-     * @param router 路由对象
-     * @return 修改成功后的数量
-     */
-    Integer updateRouters(UsersRouter router);
+     *//*
+    List<UsersRouter> getUserRoutersById(Integer userType);*/
 
     /**
      * 用户登录
@@ -70,5 +55,11 @@ public interface UsersService extends IService<Users> {
      * @return true|false
      */
     Boolean checkUsernameExist(String username);
+
+    /**
+     * 根据JWT判断是否过期
+     * @return true || false
+     */
+    Boolean checkJwtIsExpired(String token);
 
 }

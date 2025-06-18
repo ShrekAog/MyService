@@ -14,9 +14,9 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
-#mybatis-plus:
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 #management:
 #  endpoint:
@@ -34,8 +34,25 @@ my:
   jwt:
     key: HengGuang666-YaoKaiXingYaoKuaiLe
     #1=1s 60 * 60 * 24 = 86400 = 1DAY
-    time: 86400
+    time: 100000
     iss: Xu
+  security:
+    adminPath:
+      /api/users/router/**
+    userPath:
+      /api/users/router/getRouterList
+    publicPath:
+      /api/users/register,        
+      /api/users/login,           
+      /api/engine/list,
+      /api/users/router/getRouterListByUserType/**
+
+
+#publicPath
+  #登录
+  #注册
+  #引擎列表
+  #修改路由
 
 
 

@@ -27,7 +27,6 @@ public class Users implements UserDetails{
     @TableField("username")
     //用户名
     private String username;
-    //昵称
     @TableField("nick_name")
     private String nickName;
     @TableField("password")
@@ -74,26 +73,36 @@ public class Users implements UserDetails{
     //token
     String token;
 
-    public Users(String username, String password, List<GrantedAuthority> authorities) {
+  /*  public Users(String username, String password, List<GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
-    }
+    }*/
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         return authorities;
     }
 
     @Override
-    public String getPassword() {
-        return password;
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
     @Override
-    public String getUsername() {
-        return username;
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

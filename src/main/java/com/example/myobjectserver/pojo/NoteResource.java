@@ -26,6 +26,8 @@ public class NoteResource {
     private Integer id;
     @TableField("note_id")
     private Integer noteId;
+    @TableField("resource_Path_id")
+    private Integer resourcePathId;
     @TableField("image_url")
     private String imageUrl;
     @TableField("create_time")

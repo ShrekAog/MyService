@@ -29,7 +29,12 @@ public class ResourcePathController {
     }
     @GetMapping("/getStatusList")
     public R<List<ResourcePath>> getStatusList(){
-        return R.ok(resourcePathService.list(new QueryWrapper<ResourcePath>().eq("status",1)));
+        return R.ok(resourcePathService.list(
+                new QueryWrapper<ResourcePath>()
+                        .eq("status",1)
+                        .eq("user_id","0")
+
+        ));
     }
     @GetMapping("getClassifyListById/{id}")
     public R<List<Resource>> getListById(@PathVariable Integer id){

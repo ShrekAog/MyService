@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -43,7 +44,7 @@ public class JwtUtil {
      * 创建token
      * @return token
      */
-    public static String createToken(String username,String type){
+    public static String createToken(String username, List<String> role){
         return Jwts.builder()
                 .header()
                 .add("typ","JWT")
@@ -51,7 +52,7 @@ public class JwtUtil {
                 .and()
 
                 .claim("good","good job!")
-                .claim("type",type)
+                .claim("role",role)
 
                 .id(UUID.randomUUID().toString())
                 .expiration(new Date(System.currentTimeMillis() + time1 * 1000))

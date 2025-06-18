@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 恒光
@@ -16,6 +17,7 @@ import java.util.Date;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Builder
 @TableName("note")
@@ -31,4 +33,6 @@ public class Note {
     @TableField("create_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
+    @TableField(exist = false)
+    List<NoteResource> resources;
 }

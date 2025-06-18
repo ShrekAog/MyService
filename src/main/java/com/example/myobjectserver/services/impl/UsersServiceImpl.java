@@ -3,13 +3,11 @@ package com.example.myobjectserver.services.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.myobjectserver.mapper.UsersMapper;
-import com.example.myobjectserver.mapper.UsersRouterMapper;
 import com.example.myobjectserver.pojo.Users;
 import com.example.myobjectserver.pojo.UsersRouter;
 import com.example.myobjectserver.services.UsersService;
 import com.example.myobjectserver.utils.JwtUtil;
 import com.example.myobjectserver.vo.UserVo;
-import com.example.myobjectserver.vo.UsersRoutersVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -39,18 +37,16 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
 
     private final UsersMapper usersMapper;
-    private final UsersRouterMapper routerMapper;
     private AuthenticationManager manager;
     private final PasswordEncoder passwordEncoder;
 
     /**
      * 依赖构造注入
      * @param usersMapper 用户Mapper
-     * @param routerMapper 路由Mapper
+     *
      */
-    public UsersServiceImpl(UsersMapper usersMapper, UsersRouterMapper routerMapper, PasswordEncoder passwordEncoder) {
+    public UsersServiceImpl(UsersMapper usersMapper, PasswordEncoder passwordEncoder) {
         this.usersMapper = usersMapper;
-        this.routerMapper = routerMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -67,23 +63,11 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
      *
      * @param userType 用户类型
      * @return 用户路由列表
-     */
+     *//*
     @Override
     public List<UsersRouter> getUserRoutersById(Integer userType) {
         return usersMapper.getUserRoutersById(userType);
-    }
-
-    /**
-     *根据路由对象修改数据
-     * @param router 路由对象
-     * @return 修改成功后的数量
-     */
-    @Override
-    public Integer updateRouters(UsersRouter router){
-        return routerMapper.updateById(router);
-    }
-
-
+    }*/
     /**
      * 自定义登录
      * @param username 用户名
@@ -102,6 +86,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
         if(users.getUserType() == 1){
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         }else{
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         }
@@ -113,11 +98,14 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     public Users login(String username, String password) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username,password);
         Authentication authenticate = manager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
-
         Users userDetails = (Users) authenticate.getPrincipal();
+      //  SecurityContextHolder.getContext().setAuthentication(authenticate);
 
-        String token1 = JwtUtil.createToken(username, String.valueOf(userDetails.getUserType()));
+        List<String> roles = new ArrayList<>();
+        for (GrantedAuthority authority : userDetails.getAuthorities()) {
+            roles.add(authority.getAuthority());
+        }
+        String token1 = JwtUtil.createToken(username,roles);
         userDetails.setToken(token1);
         log.info("用户 {} 登录成功",username);
         log.info("用户权限 {} ",userDetails.getAuthorities().toString());
@@ -170,49 +158,14 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
     @Override
     public Boolean checkUsernameExist(String username) {
-        Users users = usersMapper.checkUsernameExist(username);
+        Users users = usersMapper.selectOne(new QueryWrapper<Users>().eq("username", username));
         return users != null;
     }
 
     @Override
-    public List<UsersRoutersVo> getUserRoutersVoByList(List<UsersRouter> routers) {
-        List<UsersRoutersVo> result = new ArrayList<>();
-        // 先处理父级菜单
-        for (UsersRouter item : routers) {
-            // 只处理父级菜单
-            if (item.getParentId() == 0) {
-                UsersRoutersVo parentVo = UsersRoutersVo.builder()
-                        .id(item.getId())
-                        .text(item.getText())
-                        .path(item.getPath())
-                        .iconPath(item.getIconPath())
-                        .parentId(Integer.valueOf(item.getParentId()))
-                        .children(new ArrayList<>())
-                        .build();
-                result.add(parentVo);
-            }
-        }
-
-        // 再处理子菜单
-        for (UsersRouter item : routers) {
-            // 只处理子菜单
-            if (item.getParentId() != 0) {
-                // 找到对应的父菜单
-                for (UsersRoutersVo parentVo : result) {
-                    if (parentVo.getId() == Integer.valueOf(item.getParentId())) {
-                        UsersRoutersVo childVo = UsersRoutersVo.builder()
-                                .id(item.getId())
-                                .text(item.getText())
-                                .path(item.getPath())
-                                .iconPath(item.getIconPath())
-                                .parentId(Integer.valueOf(item.getParentId()))
-                                .build();
-                        parentVo.getChildren().add(childVo);
-                        break;
-                    }
-                }
-            }
-        }
-        return result;
+    public Boolean checkJwtIsExpired(String token) {
+        return JwtUtil.isTokenExpired(token);
     }
+
+
 }
