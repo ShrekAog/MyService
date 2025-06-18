@@ -8,17 +8,18 @@ import java.util.List;
 
 /**
  * @author 恒光
- * createTime:2024-11-30
+ * createTime:2025-06-18
  * version:1.0
  */
 @Data
 @AllArgsConstructor
 @Builder
-public class UsersRoutersVo {
-    private Integer id;
+public class RouterVo {
+    private int id;
+    private String text;
     private String path;
     private String iconPath;
-    private String text;
     private Integer parentId;
-    private List<UsersRoutersVo> children;
+    private List<RouterVo> children;
+
 }
