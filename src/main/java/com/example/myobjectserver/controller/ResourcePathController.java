@@ -27,6 +27,10 @@ public class ResourcePathController {
     public R<List<ResourcePath>> getList(){
         return R.ok(resourcePathService.list());
     }
+    @GetMapping("/getClassFyList/{userId}")
+    public R<List<ResourcePath>> getListByUserId(@PathVariable Integer userId){
+        return R.ok(resourcePathService.list(new QueryWrapper<ResourcePath>().eq("user_id", userId)));
+    }
     @GetMapping("/getStatusList")
     public R<List<ResourcePath>> getStatusList(){
         return R.ok(resourcePathService.list(
@@ -51,7 +55,7 @@ public class ResourcePathController {
     }
     @DeleteMapping("/delete")
     public R<Boolean> deletePath(Integer id){
-        return R.ok(resourcePathService.removeById(id));
+        return R.ok(resourcePathService.removePathById(id));
     }
 
 }

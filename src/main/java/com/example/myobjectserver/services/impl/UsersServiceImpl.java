@@ -2,9 +2,11 @@ package com.example.myobjectserver.services.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.myobjectserver.exception.MyRunTimeException;
 import com.example.myobjectserver.mapper.UsersMapper;
 import com.example.myobjectserver.pojo.Users;
 import com.example.myobjectserver.pojo.UsersRouter;
+import com.example.myobjectserver.result.ResultCodeEnum;
 import com.example.myobjectserver.services.UsersService;
 import com.example.myobjectserver.utils.JwtUtil;
 import com.example.myobjectserver.vo.UserVo;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author 恒光
@@ -99,13 +102,14 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username,password);
         Authentication authenticate = manager.authenticate(token);
         Users userDetails = (Users) authenticate.getPrincipal();
-      //  SecurityContextHolder.getContext().setAuthentication(authenticate);
+
+//        SecurityContextHolder.getContext().setAuthentication(authenticate);
 
         List<String> roles = new ArrayList<>();
         for (GrantedAuthority authority : userDetails.getAuthorities()) {
             roles.add(authority.getAuthority());
         }
-        String token1 = JwtUtil.createToken(username,roles);
+        String token1 = JwtUtil.createToken(username,userDetails.getId(),roles);
         userDetails.setToken(token1);
         log.info("用户 {} 登录成功",username);
         log.info("用户权限 {} ",userDetails.getAuthorities().toString());
@@ -143,6 +147,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     @Override
     public UserVo getUserInfoById(Integer id) {
         Users users = usersMapper.selectById(id);
+        if(users == null) {
+            return null;
+        }
         return UserVo.builder()
                 .id(users.getId())
                 .username(users.getUsername())

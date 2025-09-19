@@ -22,6 +22,11 @@ public class MyRunTimeException extends RuntimeException{
         this.message = resultCodeEnum.getMessage();
         this.success = resultCodeEnum.getSuccess();
     }
+    public MyRunTimeException(int code, String message, Boolean success){
+        this.code = code;
+        this.message = message;
+        this.success = success;
+    }
 
     public MyRunTimeException(Exception e) {
         super(e);

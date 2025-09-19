@@ -88,15 +88,12 @@ public class SecurityConfig {
                 //根据用户id获取路由列表
                 .requestMatchers("/api/users/routers/**").permitAll()
 
-                .requestMatchers("/api/note/notesImage").permitAll()
                 .requestMatchers("/api/note/add").permitAll()
                 .requestMatchers("/api/note/list").permitAll()
                 .requestMatchers("/api/note/add").permitAll()
 
                 //放行服务器资源
-                .requestMatchers("/images/**").permitAll()
-                //放行服务器资源
-                .requestMatchers("/notesImages/**").permitAll()
+
                 .anyRequest().authenticated());
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.addFilterBefore(new UserFilter(), UsernamePasswordAuthenticationFilter.class);

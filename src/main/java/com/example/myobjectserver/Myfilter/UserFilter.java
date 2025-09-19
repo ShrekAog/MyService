@@ -1,7 +1,9 @@
 package com.example.myobjectserver.Myfilter;
 
 
+import com.example.myobjectserver.dto.UserDetailsInfo;
 import com.example.myobjectserver.exception.ErrorResponse;
+import com.example.myobjectserver.pojo.Users;
 import com.example.myobjectserver.result.ResultCodeEnum;
 import com.example.myobjectserver.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,16 +41,29 @@ public class UserFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(token);*/
         String authorization = request.getHeader("Authorization");
         if(authorization != null){
+            //静态资源没有走axios 因此无法携带token 只能走else
             try{
                 Claims claims = JwtUtil.parsePayload(authorization);
                 String username = claims.getSubject();
+                Integer userId = claims.get("userId", Integer.class);
                 List<String> roles = (List<String>) claims.get("role");
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 for(String role : roles){
                     authorities.add(new SimpleGrantedAuthority(role));
                 }
+                log.info("UserFilter_userId: {}",claims.get("userId",Integer.class));
 
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,null,authorities);
+
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(username,null,authorities);
+
+                UserDetailsInfo userInfo = UserDetailsInfo.builder()
+                        .username(username)
+                        .userId(userId)
+                        .build();
+
+                authenticationToken.setDetails(userInfo);
+
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 log.info("用户已登录:放行了{}",path);
                 filterChain.doFilter(request,response);
@@ -59,7 +74,7 @@ public class UserFilter extends OncePerRequestFilter {
 
             }
         }else {
-            log.info("用户未登录:放行了{}",path);
+            log.info("公共接口:执行了{}",path);
             filterChain.doFilter(request,response);
         }
     }

@@ -18,4 +18,6 @@ public interface ResourcePathService extends IService<ResourcePath> {
      * @return 资源列表
      */
     List<Resource> getListById(Integer id);
+
+    Boolean removePathById(Integer id);
 }

@@ -2,10 +2,12 @@ package com.example.myobjectserver.services;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.myobjectserver.pojo.Note;
+import com.example.myobjectserver.pojo.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 恒光
@@ -33,5 +35,15 @@ public interface NoteService extends IService<Note> {
      * @param userId
      * @return 说说列表
      */
-    List<Note> getNoteByUserId(Integer userId);
+    Map<String,Object> getNoteByUserId(Integer userId,Integer current,Integer pageSize);
+
+    /**
+     * 根据id获取日志照片
+     * @param userId 用户id
+     * @param current 第几页
+     * @param pageSize 一页几个
+     * @return resource
+     */
+    Map<String,Object> getNoteResourceByUserId(Integer userId,Integer current,Integer pageSize);
+
 }

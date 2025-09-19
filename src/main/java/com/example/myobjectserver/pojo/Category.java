@@ -5,34 +5,30 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Type;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author 恒光
- * createTime:2025-06-08
+ * createTime:2025-08-28
  * version:1.0
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
-@TableName("note")
-public class Note {
+@TableName("category")
+public class Category {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    @TableField("user_id")
-    private Integer userId;
-    @TableField("content")
-    private String content;
-    @TableField("visibility")
-    private Boolean visibility;
-    @TableField("create_time")
+    private String name;
+    private String type;
+    private String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
-    @TableField(exist = false)
-    List<Resource> resources;
 }

@@ -23,8 +23,7 @@ class MyObjectServerApplicationTests {
     private PasswordEncoder passwordEncoder;
     @Test
     void contextLoads() {
-        String[] array = Arrays.stream(publicPath.split(",")).map(String::trim).toArray(String[]::new);
-        System.out.println();
+       int i = 1/ 0;
     }
 
 

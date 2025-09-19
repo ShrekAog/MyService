@@ -44,7 +44,7 @@ public class JwtUtil {
      * 创建token
      * @return token
      */
-    public static String createToken(String username, List<String> role){
+    public static String createToken(String username,Integer userId, List<String> role){
         return Jwts.builder()
                 .header()
                 .add("typ","JWT")
@@ -53,7 +53,7 @@ public class JwtUtil {
 
                 .claim("good","good job!")
                 .claim("role",role)
-
+                .claim("userId",userId)
                 .id(UUID.randomUUID().toString())
                 .expiration(new Date(System.currentTimeMillis() + time1 * 1000))
                 .issuedAt(new Date(System.currentTimeMillis()))

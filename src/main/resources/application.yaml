@@ -11,39 +11,41 @@ spring:
     password: 123456
   servlet:
     multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
+      max-file-size: 100MB  #单个文件大小
+      max-request-size: 500MB #所有文件大小
 
+#sql日志
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-#management:
-#  endpoint:
-#    health:
-#      show-details: always
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"
+
+#日志
+#logging:
+#  file:
+#    name: logs/logged.log
+#  level:
+#    root: info
+#    com.example.myobjectserver.exception: DEBUG
 
 my:
   upload:
     file-upload-path: /images/
-    notes-upload-path: /notesImages/
   jwt:
     key: HengGuang666-YaoKaiXingYaoKuaiLe
     #1=1s 60 * 60 * 24 = 86400 = 1DAY
-    time: 100000
+    time: 86400
     iss: Xu
   security:
     adminPath:
       /api/users/router/**
     userPath:
-      /api/users/router/getRouterList
+      /api/users/router/getRouterList,
+      /api/note/remove/**
     publicPath:
+      /images/**,
       /api/users/register,        
-      /api/users/login,           
+      /api/users/login,
       /api/engine/list,
       /api/users/router/getRouterListByUserType/**
 

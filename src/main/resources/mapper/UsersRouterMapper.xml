@@ -3,10 +3,8 @@
 <mapper namespace="com.example.myobjectserver.mapper.UsersRouterMapper">
 
     <select id="getRouterChildren" resultType="com.example.myobjectserver.pojo.UsersRouter">
-        select r.* from users_router r
-        inner join users_router s on r.parent_id = s.id
-        where r.parent_id = #{parentId}
-        order by s.id
+
+        select * from users_router r where r.parent_id = #{parentId} order by r.id;
     </select>
    
 

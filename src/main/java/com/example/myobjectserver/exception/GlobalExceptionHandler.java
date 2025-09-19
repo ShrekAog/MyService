@@ -5,12 +5,16 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import java.util.Arrays;
 
 
 /**
@@ -29,10 +33,9 @@ public class GlobalExceptionHandler {
      * @return errorException
      */
     @ExceptionHandler(MultipartException.class)
-    public ResponseEntity<ErrorResponse> handleMultipartException(MultipartException ex){
+    public ErrorResponse handleMultipartException(MultipartException ex){
         logger.error("发生文件上传异常，原因是:{}",ex.getMessage());
-        ErrorResponse errorResponse = new ErrorResponse(ResultCodeEnum.FILE_ERROR);
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ErrorResponse(ResultCodeEnum.FILE_ERROR);
     }
 
     /**
@@ -42,7 +45,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MyRunTimeException.class)
     public ErrorResponse handleMyRunTimeException(MyRunTimeException ex){
-        System.out.println("6666666666666");
         logger.error("发生自定义异常,原因是:{}",ex.getMessage());
         return new ErrorResponse(ex.getCode(),ex.getMessage(),ex.getSuccess());
     }
@@ -80,6 +82,33 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(ResultCodeEnum.EXPIRED_JWT);
     }
 
+    /**
+     * 请求方式错误
+     * @param ex HttpRequestMethodNotSupportedException
+     * @return REQUEST_METHOD_ERROR
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ErrorResponse handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex){
+        logger.error("请求方式异常:{}",ex.getMessage());
+        return new ErrorResponse(ResultCodeEnum.REQUEST_METHOD_ERROR);
+    }
+
+    /**
+     * 缺少必要参数
+     * @param ex MissingServletRequestParameterException
+     * @return MISSING_REQUEST_PARAMETER
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ErrorResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException ex){
+        logger.error("缺少必要参数:{}",ex.getMessage());
+        return new ErrorResponse(ResultCodeEnum.MISSING_REQUEST_PARAMETER);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ErrorResponse handleNoResourceFoundException(NoResourceFoundException ex){
+        logger.error("查找资源失败:{}",ex.getMessage());
+        return new ErrorResponse(ResultCodeEnum.FIND_RESOURCE_ERROR);
+    }
 
     /**
      * 捕获所有服务器异常
@@ -88,7 +117,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ErrorResponse handleAllException(Exception ex){
-        logger.error("发生服务器异常,原因是:{}",ex.getMessage());
+        logger.error("发生服务器异常",ex);
         return new ErrorResponse(ResultCodeEnum.UNKNOWN_ERROR);
     }
 

@@ -6,6 +6,7 @@ import com.example.myobjectserver.services.UsersService;
 import com.example.myobjectserver.utils.JwtUtil;
 import com.example.myobjectserver.vo.UserVo;
 import io.jsonwebtoken.Claims;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 /**
